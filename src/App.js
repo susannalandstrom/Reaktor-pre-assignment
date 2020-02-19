@@ -12,7 +12,7 @@ function App() {
     readSampleFile()
     .then(res => {
       setPackages(res)
-      setSelectedPackage(res[2])
+      setSelectedPackage(res[0])
     })
     
   }, []);
@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="App">
         <ListOfPackages packages={packages} selectedPackage={selectedPackage} setSelectedPackage={setSelectedPackage}/>
-        <PackageDetails selectedPackage={selectedPackage}/>
+        <PackageDetails packages={packages} selectedPackage={selectedPackage} setSelectedPackage={setSelectedPackage}/>
     </div>
   );
 }
