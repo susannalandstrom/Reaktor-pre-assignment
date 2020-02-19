@@ -32,19 +32,13 @@ function processStatusData(statusData) {
                 lastAddedProperty = rowProperty[0]
 
                 if (propertiesToKeep.includes(rowProperty[0])) {
-                    if (rowProperty[0] === 'Depends') {
+                    if (rowProperty[0] === 'Depends')
                         object[rowProperty[0]] = parseDependencies(rowProperty[1])
-                        console.log(object[rowProperty[0]])
-                    }
-                        
-                    else {
+                    else
                         object[rowProperty[0]] = rowProperty[1]
-                    }
                     object["id"] = index
-                }
-                    
+                }    
             }
-            
         })
         return object
     })
@@ -61,16 +55,12 @@ function sortStatusData(statusData) {
 
 function parseDependencies(dependencies) {
     const dependenciesArray = dependencies.split("|").join(",").split(",")
-    console.log(dependenciesArray)
     return dependenciesArray.map(dependency => {
         let startIndex = dependency.indexOf("(")
         if (startIndex > 0) {
-            if (dependency[startIndex-1] === " ")
-                startIndex = startIndex-1
-            return dependency.substring(0, startIndex)
+            return dependency.substring(0, startIndex).trim()
         }
-            
         else
-            return dependency
+            return dependency.trim()
     })
 }
