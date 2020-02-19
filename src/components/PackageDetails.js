@@ -1,15 +1,32 @@
 import React from 'react';
 
-function PackageDetails({selectedPackage}) {
+function PackageDetails({packages, selectedPackage, setSelectedPackage}) {
+    const packageNames = packages.map(item => item.Package)
+
     return (
       <div className="selectedPackage">
           {selectedPackage ? 
           <div>
-            <h1 style={{ color: '#CF3727', marginTop: '20px' }}>{selectedPackage.Package}</h1> 
-            <h2>Description:</h2>
-            <p>{selectedPackage.Description}</p>
-            <h2>Dependencies:</h2>
-            <p>{selectedPackage.Depends ? selectedPackage.Depends.join(", ") : "None"}</p>
+            <h2>{selectedPackage.Package}</h2> 
+            <h3>Description:</h3>
+            <p style={{ marginBottom: '20px' }}>{selectedPackage.Description}</p>
+            <h3>Dependencies:</h3>
+            {selectedPackage.Depends 
+            ? selectedPackage.Depends.map((dependency => {
+                if (packageNames.includes(dependency)) {
+                    return <p   key={dependency}
+                                className="dependency" 
+                                onClick={() => setSelectedPackage(packages.filter(item => item.Package === dependency)[0])}>
+                                {dependency}
+                            </p>
+                }
+                else {
+                    return <p key={dependency}>{dependency}</p>
+                }    
+            }
+                
+            )) 
+            : "None"}
             {/* <p>Reverse dependencies: {selectedPackage.Depends ? selectedPackage.Depends : "None"}</p> */}
           </div>
           : 'Loading'}
