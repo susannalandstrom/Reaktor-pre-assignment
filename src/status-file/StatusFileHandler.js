@@ -1,0 +1,71 @@
+import sampleFile from './sampleFile'
+import sampleFile2 from './sampleFile2'
+
+export function readSampleFile() {
+    return(
+        fetch(sampleFile)
+        .then(response => response.text())
+        .then(data => processStatusData(data))
+    )
+}
+
+function processStatusData(statusData) {
+    const packages = statusData.split("\n\n")
+    const propertiesToKeep = ["Package", "Description", "Depends"]
+
+    const packageObjects = packages.map((packageItem, index) => {
+
+        const packagesSplitIntoRows = packageItem.split("\n")
+        let object = {}
+        let lastAddedProperty = ""
+        packagesSplitIntoRows.forEach(row => {
+            if (row[0] === " " && lastAddedProperty === "Description") {
+                let value = object["Description"]
+                if (typeof value === 'string') 
+                    value = [value]
+                value.push(row)
+                object["Description"] = value
+            }
+            else {
+                const rowProperty = row.split(": ")
+                lastAddedProperty = rowProperty[0]
+
+                if (propertiesToKeep.includes(rowProperty[0])) {
+                    if (rowProperty[0] === 'Depends') {
+                        object[rowProperty[0]] = parseDependencies(rowProperty[1])
+                        console.log(object[rowProperty[0]])
+                    }
+                        
+                    else {
+                        object[rowProperty[0]] = rowProperty[1]
+                    }
+                    object["id"] = index
+                }
+                    
+            }
+            
+        })
+        return object
+    })
+
+    if (Object.keys(packageObjects[packageObjects.length-1]).length === 0) 
+        packageObjects.splice(-1, 1)
+
+    return packageObjects
+}
+
+function parseDependencies(dependencies) {
+    const dependenciesArray = dependencies.split("|").join(",").split(",")
+    console.log(dependenciesArray)
+    return dependenciesArray.map(dependency => {
+        let startIndex = dependency.indexOf("(")
+        if (startIndex > 0) {
+            if (dependency[startIndex-1] === " ")
+                startIndex = startIndex-1
+            return dependency.substring(0, startIndex)
+        }
+            
+        else
+            return dependency
+    })
+}
