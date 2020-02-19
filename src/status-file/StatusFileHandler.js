@@ -6,6 +6,7 @@ export function readSampleFile() {
         fetch(sampleFile)
         .then(response => response.text())
         .then(data => processStatusData(data))
+        .then(data => sortStatusData(data))
     )
 }
 
@@ -52,6 +53,10 @@ function processStatusData(statusData) {
         packageObjects.splice(-1, 1)
 
     return packageObjects
+}
+
+function sortStatusData(statusData) {
+    return statusData.sort((a, b) => a.Package > b.Package ? 1 : -1)
 }
 
 function parseDependencies(dependencies) {
