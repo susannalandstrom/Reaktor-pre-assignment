@@ -16,6 +16,8 @@
   grid-row-end: 2;
   display: inline-grid;
   height: inherit;
+  background-color: #F8F8F8;
+  /* padding: 30px; */
 }
 
 .packageList {
@@ -30,10 +32,8 @@
   grid-column-end: 3;
   grid-row-start: 1;
   grid-row-end: 2;
-  margin-right: 30px;
-  background-color: #F8F8F8;
-  margin: 10px;
-  border-radius: 5px;
+  /* margin-right: 30px; */
+  padding: 30px;
 }
 
 ul {
@@ -55,16 +55,30 @@ h1 {
 }
 
 h2 {
-  margin: 30px 30px 10px 30px;
+  font-size: larger;
+  margin: 0 0 30px 0;
+  color: #CF3727;
+}
+
+h3 {
+  margin-bottom: 10px;
   font-size: medium;
   color: #242730;
 }
 
 p {
-  margin: 0 30px;
   font-size: medium;
   color: #242730;
   line-height: 25px;
+  width: fit-content;
+  float: left;
+  margin: 5px 10px 5px 0;
+}
+
+.dependency {
+  color: #FF5544;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .App-logo {
