@@ -7,6 +7,7 @@ export function readSampleFile() {
         .then(response => response.text())
         .then(data => processStatusData(data))
         .then(data => sortStatusData(data))
+        .then(data => findReverseDependencies(data))
     )
 }
 
@@ -49,13 +50,9 @@ function processStatusData(statusData) {
     return packageObjects
 }
 
-function sortStatusData(statusData) {
-    return statusData.sort((a, b) => a.Package > b.Package ? 1 : -1)
-}
-
 function parseDependencies(dependencies) {
     const dependenciesArray = dependencies.split("|").join(",").split(",")
-    return dependenciesArray.map(dependency => {
+    let array = dependenciesArray.map(dependency => {
         let startIndex = dependency.indexOf("(")
         if (startIndex > 0) {
             return dependency.substring(0, startIndex).trim()
@@ -63,4 +60,26 @@ function parseDependencies(dependencies) {
         else
             return dependency.trim()
     })
+
+    // remove duplicates
+    let set = new Set(array)
+    return Array.from(set)
+}
+
+function sortStatusData(statusData) {
+    return statusData.sort((a, b) => a.Package > b.Package ? 1 : -1)
+}
+
+function findReverseDependencies(packages) {
+    const packagesWithDependencies = packages.filter(packet => packet.Depends !== undefined)
+
+    const packagesWithReverseDependencies = packages.map(item => {
+        const reverseDependencies = packagesWithDependencies.filter(packet => packet.Depends.includes(item.Package))
+
+        if (reverseDependencies.length > 0) {
+            item["ReverseDependencies"] = reverseDependencies.map(dependency => dependency.Package)
+        }
+        return item
+    })
+    return packagesWithReverseDependencies
 }
