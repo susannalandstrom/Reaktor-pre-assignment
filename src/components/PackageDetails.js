@@ -10,8 +10,15 @@ function PackageDetails({packages, selectedPackage, setSelectedPackage}) {
             <h2>{selectedPackage.Package}</h2>
 
             <h3>Description:</h3>
-            <p style={{ marginBottom: '20px' }}>{selectedPackage.Description}</p>
-            
+            <div style={{ display: 'inline-block' }}>
+                <p style={{ width: '100%' }}>{selectedPackage.Description[0]}</p>
+                {selectedPackage.Description.slice(1).map(line => {
+                    if (line.trim() === '.') {
+                        return <br></br>
+                    }
+                    else return line
+                })}
+            </div>
             <h3>Dependencies:</h3>
             <div style={{ display: 'inline-block' }}>
                 {selectedPackage.Depends 
