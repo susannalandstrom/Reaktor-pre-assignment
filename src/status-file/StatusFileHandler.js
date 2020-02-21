@@ -1,5 +1,4 @@
 import sampleFile from './sampleFile'
-import sampleFile2 from './sampleFile2'
 
 export function readSampleFile() {
     return(
@@ -15,7 +14,7 @@ function processStatusData(statusData) {
     const packages = statusData.split("\n\n")
     const propertiesToKeep = ["Package", "Description", "Depends"]
 
-    const packageObjects = packages.map((packageItem, index) => {
+    const packageObjects = packages.map((packageItem) => {
 
         const packagesSplitIntoRows = packageItem.split("\n")
         let object = {}
@@ -29,21 +28,20 @@ function processStatusData(statusData) {
                 object["Description"] = value
             }
             else {
-                const rowProperty = row.split(": ")
-                lastAddedProperty = rowProperty[0]
+                const splittedRow = row.split(": ")
+                lastAddedProperty = splittedRow[0]
 
-                if (propertiesToKeep.includes(rowProperty[0])) {
-                    if (rowProperty[0] === 'Depends')
-                        object[rowProperty[0]] = parseDependencies(rowProperty[1])
+                if (propertiesToKeep.includes(splittedRow[0])) {
+                    if (splittedRow[0] === 'Depends')
+                        object[splittedRow[0]] = parseDependencies(splittedRow[1])
                     else
-                        object[rowProperty[0]] = rowProperty[1]
-                    object["id"] = index
+                        object[splittedRow[0]] = splittedRow[1]
                 }    
             }
         })
         return object
     })
-
+    // remove empty object at the end
     if (Object.keys(packageObjects[packageObjects.length-1]).length === 0) 
         packageObjects.splice(-1, 1)
 
@@ -52,7 +50,8 @@ function processStatusData(statusData) {
 
 function parseDependencies(dependencies) {
     const dependenciesArray = dependencies.split("|").join(",").split(",")
-    let array = dependenciesArray.map(dependency => {
+
+    let dependenciesWithoutVersions = dependenciesArray.map(dependency => {
         let startIndex = dependency.indexOf("(")
         if (startIndex > 0) {
             return dependency.substring(0, startIndex).trim()
@@ -60,9 +59,8 @@ function parseDependencies(dependencies) {
         else
             return dependency.trim()
     })
-
     // remove duplicates
-    let set = new Set(array)
+    let set = new Set(dependenciesWithoutVersions)
     return Array.from(set)
 }
 
