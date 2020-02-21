@@ -58,7 +58,7 @@ function PackageDetails({packages, selectedPackage, setSelectedPackage}) {
                 : "None"}
             </div>
           </div>
-          : 'Loading'}
+          : <h2>Loading...</h2>}
             
       </div>
     );

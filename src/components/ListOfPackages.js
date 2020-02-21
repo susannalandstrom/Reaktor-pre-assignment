@@ -3,7 +3,7 @@ import './../App.css';
 
 function ListOfPackages({packages, selectedPackage, setSelectedPackage}) {
     return (
-      <div className="list">
+      <div className="packageListContainer">
           <h1>Packages</h1>
           <ul className="packageList">
             {packages.map((item) => 
