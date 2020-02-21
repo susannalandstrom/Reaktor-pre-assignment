@@ -21,11 +21,7 @@ function processStatusData(statusData) {
         let lastAddedProperty = ""
         packagesSplitIntoRows.forEach(row => {
             if (row[0] === " " && lastAddedProperty === "Description") {
-                let value = object["Description"]
-                if (typeof value === 'string') 
-                    value = [value]
-                value.push(row)
-                object["Description"] = value
+                object["Description"].push(row)
             }
             else {
                 const splittedRow = row.split(": ")
@@ -34,6 +30,8 @@ function processStatusData(statusData) {
                 if (propertiesToKeep.includes(splittedRow[0])) {
                     if (splittedRow[0] === 'Depends')
                         object[splittedRow[0]] = parseDependencies(splittedRow[1])
+                    else if (splittedRow[0] === 'Description')
+                        object[splittedRow[0]] = [splittedRow[1]]
                     else
                         object[splittedRow[0]] = splittedRow[1]
                 }    

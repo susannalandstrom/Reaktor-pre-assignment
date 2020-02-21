@@ -12,7 +12,7 @@ function PackageDetails({packages, selectedPackage, setSelectedPackage}) {
             <h3>Description:</h3>
             <div style={{ display: 'inline-block' }}>
                 <p style={{ width: '100%' }}>{selectedPackage.Description[0]}</p>
-                {selectedPackage.Description.slice(1).map(line => {
+                {selectedPackage.Description.length > 1 && selectedPackage.Description.slice(1).map(line => {
                     if (line.trim() === '.') {
                         return <br></br>
                     }
